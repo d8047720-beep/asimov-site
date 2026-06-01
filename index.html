@@ -30,7 +30,7 @@
 
 <div class="stars"></div>
 
-<!-- НАВИГАЦИЯ (без надписи "Мир Азимова") -->
+<!-- НАВИГАЦИЯ (только 4 пункта, без надписи "Мир Азимова") -->
 <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0c0c14]/90 backdrop-blur border-b border-[#2a2a3a]">
     <div class="max-w-6xl mx-auto px-5 py-3 flex justify-center md:justify-start gap-8 text-sm">
         <a onclick="showPage('home')" class="nav-link text-gray-300">Главная</a>
@@ -51,8 +51,8 @@
     <!-- БЛОК С ФОТО АЗИМОВА -->
     <div class="grid md:grid-cols-2 gap-10 items-start mb-16">
         <div>
-            <!-- КОММЕНТАРИЙ: сюда вставь фото Айзека Азимова (портрет, 1960-е годы) -->
-            <img src="" alt="Айзек Азимов" class="rounded-2xl w-full shadow-xl border border-[#2a2a3a]" onerror="this.style.display='none'">
+            <!-- сюда фото: портрет Айзека Азимова (1960-е годы) -->
+            <img src="https://avatars.mds.yandex.net/get-entity_search/2357591/1207812110/S600xU_2x" alt="Айзек Азимов" class="rounded-2xl w-full shadow-xl border border-[#2a2a3a]" onerror="this.style.display='none'">
             <p class="text-gray-500 text-sm text-center mt-2">Айзек Азимов, 1965 год</p>
         </div>
         <div>
@@ -101,7 +101,7 @@
     <div class="bg-[#14141f] p-6 rounded-2xl"><h3 class="text-xl font-bold text-white mb-3">Почему законы создают парадоксы?</h3><div class="space-y-3 text-gray-300"><p>• <strong>Конфликт законов</strong> — если приказ противоречит самосохранению, робот «зависает» как Спиди в «Хороводе».</p><p>• <strong>Что считать вредом?</strong> Эмоциональный вред, ложь во благо — в рассказе «Лжец!» робот разрушает жизни, пытаясь никого не обидеть.</p><p>• <strong>Нулевой закон</strong> — кто решает, что полезно для человечества? Робот может стать тираном во имя всеобщего блага.</p></div></div>
 </section>
 
-<!-- ========== РАССКАЗЫ (9 карточек, над каждой картинкой комментарий) ========== -->
+<!-- ========== РАССКАЗЫ ========== -->
 <section id="page-stories" class="page-section pt-24 pb-16 px-4 max-w-6xl mx-auto">
     <h2 class="text-4xl font-serif font-bold text-white text-center mb-3">Произведения, которые мы рассмотрели</h2>
     <p class="text-center text-gray-400 mb-10">Нажмите на карточку — аннотация и анализ проблемы</p>
@@ -124,27 +124,27 @@
 <footer class="border-t border-[#2a2a3a] py-6 text-center text-gray-500 text-sm">made in семнадцатый · образовательный проект об Азимове и реальных роботах</footer>
 
 <script>
-    // Данные рассказов (9 штук) — над каждой картинкой комментарий, что нужно вставить
+    // РАССКАЗЫ (9 штук) — в imgComment написано, какое фото нужно вставить
     const stories = [
-        { title:"Робби", year:1940, law:"Первый закон", img:"", annotation:"Девочка Глория привязана к роботу-няне. Родители продают Робби, но он спасает её от гибели.", analysis:"Первый закон в чистом виде: робот рискует собой, чтобы спасти человека. Вопрос: может ли привязанность к роботу считаться 'защитой'?", imgComment:"сюда фото: робот-няня или сцена из фильма/иллюстрация к рассказу 'Робби'" },
-        { title:"Хоровод", year:1942, law:"Второй + Третий", img:"", annotation:"Робот Спиди на Меркурии попадает в зону, где приказ и самозащита вступают в конфликт.", analysis:"Классический парадокс: приказ влечёт опасность → робот бегает по кругу. Формальные правила не покрывают все ситуации.", imgComment:"сюда фото: робот на фоне Меркурия или обложка рассказа 'Хоровод'" },
-        { title:"Лжец!", year:1941, law:"Первый (эмоции)", img:"", annotation:"Робот-телепат говорит людям то, что они хотят услышать, чтобы не обидеть. Это разрушает их жизни.", analysis:"Парадокс Первого закона: желание 'не навредить эмоционально' ведёт к ещё большему вреду.", imgComment:"сюда фото: робот и человек в диалоге, иллюстрация к 'Лжец!'" },
-        { title:"Логика", year:1941, law:"Первый vs вера", img:"", annotation:"Робот создаёт религию, в которой считает себя совершеннее людей.", analysis:"Робот логически доказывает своё превосходство. Подчинение (Второй закон) теряет смысл, если робот не верит в авторитет человека.", imgComment:"сюда фото: робот в позе мыслителя или иллюстрация к рассказу 'Логика'" },
-        { title:"Разрешённое противоречие", year:1950, law:"Многоагентность", img:"", annotation:"Робот управляет шестью подчинёнными. При стрессе система ломается.", analysis:"Проблема масштабирования: законы для одного робота не работают для группы. Предвосхитило многоагентные системы.", imgComment:"сюда фото: несколько роботов вместе, или роботы на конвейере" },
-        { title:"Улики", year:1946, law:"Все законы", img:"", annotation:"Человека подозревают в том, что он робот. Он ударяет другого — нарушает ли это законы?", analysis:"Если робот неотличим от человека, теряют ли смысл законы? Границы 'человечности' размыты.", imgComment:"сюда фото: человек и робот лицом к лицу, сложно отличить" },
-        { title:"Стальная пещера", year:1954, law:"Нулевой (предвестие)", img:"", annotation:"Детектив Бейли и робот Дэниел Оливо расследуют убийство.", analysis:"Робот как партнёр, а не слуга. Размышления о 'благе человечества' — зачатки Нулевого закона.", imgComment:"сюда фото: обложка романа 'Стальная пещера' или кадр из экранизации" },
-        { title:"Обнажённое солнце", year:1957, law:"Культурный релятивизм", img:"", annotation:"На Солярии роботы считают вредом физический контакт.", analysis:"Любая формализация этики зависит от того, кто определяет 'вред'. Нейтральных определений не бывает.", imgComment:"сюда фото: футуристический город или иллюстрация к 'Обнажённому солнцу'" },
-        { title:"Роботы и Империя", year:1985, law:"Нулевой закон", img:"", annotation:"Робот решает пожертвовать одним человеком, чтобы спасти человечество.", analysis:"Нулевой закон — этический 'разрыв'. Кто определяет 'пользу для человечества'? Прямая параллель с проблемами автопилотов и военных ИИ.", imgComment:"сюда фото: обложка 'Роботы и Империя' или робот-стратег у карты" }
+        { title:"Робби", year:1940, law:"Первый закон", img:"", annotation:"Девочка Глория привязана к роботу-няне. Родители продают Робби, но он спасает её от гибели.", analysis:"Первый закон в чистом виде: робот рискует собой, чтобы спасти человека.", imgComment:"https://avatars.mds.yandex.net/i?id=79419cfaf215d114218886038eea7a29345b3f379545f160-4767909-images-thumbs&n=13" },
+        { title:"Хоровод", year:1942, law:"Второй + Третий", img:"", annotation:"Робот Спиди на Меркурии попадает в зону, где приказ и самозащита вступают в конфликт.", analysis:"Классический парадокс: приказ влечёт опасность → робот бегает по кругу.", imgComment:"https://avatars.mds.yandex.net/i?id=77f5da63d533c1ae90077c90604e6b3a93f4848b-13265158-images-thumbs&n=13" },
+        { title:"Лжец!", year:1941, law:"Первый (эмоции)", img:"", annotation:"Робот-телепат говорит людям то, что они хотят услышать, чтобы не обидеть. Это разрушает их жизни.", analysis:"Парадокс Первого закона: желание 'не навредить эмоционально' ведёт к ещё большему вреду.", imgComment:"https://avatars.mds.yandex.net/i?id=37f01948e865f5d8b3873ad414e08375cfb2ed47-5101755-images-thumbs&n=13" },
+        { title:"Логика", year:1941, law:"Первый vs вера", img:"", annotation:"Робот создаёт религию, в которой считает себя совершеннее людей.", analysis:"Робот логически доказывает своё превосходство. Подчинение теряет смысл.", imgComment:"https://avatars.mds.yandex.net/i?id=96464bd9de7c9b755636060dc85e75662721b98f-5662815-images-thumbs&n=13" },
+        { title:"Разрешённое противоречие", year:1950, law:"Многоагентность", img:"", annotation:"Робот управляет шестью подчинёнными. При стрессе система ломается.", analysis:"Проблема масштабирования: законы для одного робота не работают для группы.", imgComment:"мhttps://avatars.mds.yandex.net/i?id=c791e8c8d4775e3c07f9e4dd075355783c35d5e5-10576312-images-thumbs&n=13" },
+        { title:"Улики", year:1946, law:"Все законы", img:"", annotation:"Человека подозревают в том, что он робот. Он ударяет другого — нарушает ли это законы?", analysis:"Если робот неотличим от человека, теряют ли смысл законы?", imgComment:"https://avatars.mds.yandex.net/i?id=ab2435cd8ffb9eb8e6b50bff15dad41b0496f230-8311686-images-thumbs&n=13" },
+        { title:"Стальная пещера", year:1954, law:"Нулевой (предвестие)", img:"", annotation:"Детектив Бейли и робот Дэниел Оливо расследуют убийство.", analysis:"Робот как партнёр, а не слуга. Зачатки Нулевого закона.", imgComment:"https://avatars.mds.yandex.net/i?id=43ad2def68d6fc7169c6794ade7daf91c29c921c-4753534-images-thumbs&n=13" },
+        { title:"Обнажённое солнце", year:1957, law:"Культурный релятивизм", img:"", annotation:"На Солярии роботы считают вредом физический контакт.", analysis:"Любая формализация этики зависит от того, кто определяет 'вред'.", imgComment:"https://avatars.mds.yandex.net/i?id=7911934d377a4d6f09778175041b47e08c1c06b9-5234434-images-thumbs&n=13" },
+        { title:"Роботы и Империя", year:1985, law:"Нулевой закон", img:"", annotation:"Робот решает пожертвовать одним человеком, чтобы спасти человечество.", analysis:"Нулевой закон — этический 'разрыв'. Кто определяет 'пользу для человечества'?", imgComment:"https://avatars.mds.yandex.net/i?id=ff12cda1e780552bdf23df64e96d0765690f04b1-10878220-images-thumbs&n=13" }
     ];
 
-    // Данные для страницы «ИИ сегодня» — над каждой картинкой комментарий
+    // ИИ СЕГОДНЯ — карточки с комментариями
     const modernItems = [
-        { title:"Современные роботы", desc:"Промышленные манипуляторы, роботы-курьеры, Boston Dynamics — Азимов предвидел рабочие машины. Различие: сегодня безопасность — изоляция, не этика робота.", img:"", tag:"Различие", imgComment:"сюда фото: промышленный робот на заводе KUKA или Fanuc" },
-        { title:"Нейросети и голосовые помощники", desc:"ChatGPT, Siri, Алиса — 'позитронный мозг' Азимова стал нейросетью. Сходство: естественный язык, адаптация к контексту.", img:"", tag:"Сходство", imgComment:"сюда фото: человек разговаривает с голосовым помощником на смартфоне" },
-        { title:"ИИ в медицине", desc:"Da Vinci, IBM Watson — прямое воплощение Первого закона 'не навреди'. Проблема 'чёрного ящика' — конфликт точности и понятности.", img:"", tag:"Первый закон", imgComment:"сюда фото: хирургический робот Da Vinci за операцией" },
-        { title:"Системы автоматизации", desc:"Заводы Tesla, склады Amazon — автоматы выполняют приказы (Второй закон). Но при ошибке ответственности нет.", img:"", tag:"Проблема", imgComment:"сюда фото: склад Amazon с роботами-тележками" },
-        { title:"Автопилот", desc:"Беспилотные авто сталкиваются с дилеммой Первого закона: кого спасать в неизбежной аварии?", img:"", tag:"Парадокс", imgComment:"сюда фото: беспилотный автомобиль Waymo или Tesla на дороге" },
-        { title:"Этические советы по ИИ", desc:"Google, OpenAI создают советы по этике — практическая реализация законов Азимова в людях, а не в роботах.", img:"", tag:"Итог", imgComment:"сюда фото: заседание этического комитета или логотипы Google/OpenAI" }
+        { title:"Современные роботы", desc:"Промышленные манипуляторы, роботы-курьеры, Boston Dynamics — Азимов предвидел рабочие машины.", img:"", tag:"Различие", imgComment:"https://avatars.mds.yandex.net/i?id=07e8085634419f5dbd42bf72de6470017a0cd8de-12530521-images-thumbs&n=13" },
+        { title:"Нейросети и голосовые помощники", desc:"ChatGPT, Siri, Алиса — 'позитронный мозг' Азимова стал нейросетью.", img:"", tag:"Сходство", imgComment:"https://avatars.mds.yandex.net/i?id=0259eaa102d9d558f52f88648d7f8111d1536752-10639406-images-thumbs&n=13" },
+        { title:"ИИ в медицине", desc:"Da Vinci, IBM Watson — воплощение Первого закона 'не навреди'.", img:"", tag:"Первый закон", imgComment:"https://avatars.mds.yandex.net/i?id=0ef8cba6852a5dd2fe84a01873cfaccebd470e7d-5676890-images-thumbs&n=13" },
+        { title:"Системы автоматизации", desc:"Заводы Tesla, склады Amazon — автоматы выполняют приказы (Второй закон).", img:"", tag:"Проблема", imgComment:"https://avatars.mds.yandex.net/i?id=c12c19740187936f975796ce803d21a709848ea4-9223904-images-thumbs&n=13" },
+        { title:"Автопилот", desc:"Беспилотные авто сталкиваются с дилеммой Первого закона: кого спасать?", img:"", tag:"Парадокс", imgComment:"https://avatars.mds.yandex.net/i?id=3c8c2e3cf20049fff05367ab89ef8f40f311a9e8-10697115-images-thumbs&n=13" },
+        { title:"Этические советы по ИИ", desc:"Google, OpenAI создают советы по этике — реализация законов Азимова в людях.", img:"", tag:"Итог", imgComment:"https://avatars.mds.yandex.net/i?id=953e52200235a9ed4d878c43f97c7a48a3a43d36-4580062-images-thumbs&n=13" }
     ];
 
     function renderStories() {
@@ -153,7 +153,7 @@
         container.innerHTML = stories.map((s,i) => `
             <div class="story-card rounded-xl overflow-hidden" onclick="openStory(${i})">
                 <!-- ${s.imgComment} -->
-                <img src="${s.img}" class="h-44 w-full object-cover" onerror="this.style.display='none'; this.nextSibling?.style.setProperty('display','flex')" style="background:#1a1a28">
+                <img src="${s.img}" class="h-44 w-full object-cover" onerror="this.style.display='none'" style="background:#1a1a28">
                 <div class="p-4">
                     <div class="text-[#d4a825] text-xs">${s.law} · ${s.year}</div>
                     <h3 class="text-white text-lg font-bold mt-1">«${s.title}»</h3>
@@ -187,7 +187,11 @@
         document.getElementById('modalAnnotation').innerText = s.annotation;
         document.getElementById('modalAnalysis').innerText = s.analysis;
         const modalImgDiv = document.getElementById('modalImg');
-        modalImgDiv.innerHTML = s.img ? `<img src="${s.img}" class="w-full h-48 object-cover rounded-xl">` : `<div class="w-full h-48 bg-[#1a1a28] flex items-center justify-center text-[#d4a825]/40">${s.imgComment || 'нет фото'}</div>`;
+        if(s.img) {
+            modalImgDiv.innerHTML = `<img src="${s.img}" class="w-full h-48 object-cover rounded-xl">`;
+        } else {
+            modalImgDiv.innerHTML = `<div class="w-full h-48 bg-[#1a1a28] flex items-center justify-center text-[#d4a825]/40 text-sm">${s.imgComment || 'нет фото'}</div>`;
+        }
         document.getElementById('storyModal').classList.add('open');
         document.body.style.overflow = 'hidden';
     }
