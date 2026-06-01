@@ -1,194 +1,190 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Азимов — Три закона робототехники</title>
+    <title>Мир Азимова и ИИ</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        cosmos: { 900: '#0a0a12', 800: '#0f0f1e', 700: '#161630', 600: '#1e1e42' },
-                        gold: { 300: '#f5d98e', 400: '#e8c54a', 500: '#d4a825', 600: '#b8891a' }
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #0a0a12; color: #e2e2e2; }
-        .font-playfair { font-family: 'Playfair Display', serif; }
-        .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; background: radial-gradient(ellipse at 20% 50%, rgba(30,30,66,0.3) 0%, transparent 60%); }
+        body { font-family: system-ui, -apple-system, 'Inter', sans-serif; background: #0c0c14; color: #e5e5e5; }
         .page-section { display: none; }
         .page-section.active { display: block; }
-        .nav-link { position: relative; }
-        .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #d4a825; transition: width 0.3s; }
-        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
-        .timeline-dot { width: 14px; height: 14px; border-radius: 50%; background: #d4a825; border: 2px solid #0a0a12; box-shadow: 0 0 8px rgba(212,168,37,0.6); }
-        .law-card, .story-card, .ai-card { background: linear-gradient(135deg, rgba(30,30,66,0.65), rgba(15,15,30,0.85)); border: 1px solid rgba(212,168,37,0.2); transition: all 0.25s ease; backdrop-filter: blur(2px); }
-        .law-card:hover, .story-card:hover, .ai-card:hover { border-color: rgba(212,168,37,0.5); transform: translateY(-3px); box-shadow: 0 10px 25px -8px rgba(212,168,37,0.15); }
-        .story-card { cursor: pointer; }
-        .story-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.88); backdrop-filter: blur(6px); opacity: 0; pointer-events: none; transition: opacity 0.25s; }
-        .story-modal.open { opacity: 1; pointer-events: all; }
-        .story-modal .modal-content { background: #0f0f1e; border: 1px solid rgba(212,168,37,0.4); transform: scale(0.96); transition: transform 0.2s; max-height: 90vh; overflow-y: auto; border-radius: 1.5rem; max-width: 36rem; width: 90%; }
-        .story-modal.open .modal-content { transform: scale(1); }
-        .mobile-menu { transform: translateX(100%); transition: transform 0.25s ease; background: #0a0a12ee; backdrop-filter: blur(20px); }
-        .mobile-menu.open { transform: translateX(0); }
-        .hero-gradient { background: linear-gradient(135deg, rgba(212,168,37,0.1) 0%, transparent 55%), linear-gradient(235deg, rgba(22,22,48,0.6) 0%, transparent 45%); }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .fade-up { animation: fadeUp 0.5s ease forwards; }
-        img { display: block; width: 100%; height: auto; object-fit: cover; }
+        .nav-link { transition: all 0.2s; cursor: pointer; }
+        .nav-link:hover { color: #d4a825; }
+        .card { background: #14141f; border: 1px solid #2a2a3a; transition: all 0.2s; }
+        .card:hover { border-color: #d4a825; transform: translateY(-3px); }
+        .story-card { cursor: pointer; transition: all 0.2s; background: #14141f; border: 1px solid #2a2a3a; }
+        .story-card:hover { border-color: #d4a825; transform: translateY(-4px); }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; z-index: 100; }
+        .modal.open { display: flex; }
+        .modal-content { background: #111118; border: 1px solid #d4a825; max-width: 500px; width: 90%; border-radius: 16px; max-height: 80vh; overflow-y: auto; }
+        .timeline-dot { width: 12px; height: 12px; background: #d4a825; border-radius: 50%; border: 2px solid #0c0c14; }
     </style>
 </head>
-<body class="overflow-x-hidden">
+<body class="antialiased">
+
+<!-- ЗВЁЗДНОЕ НЕБО (лёгкое, не отвлекает) -->
 <div class="stars"></div>
 
 <!-- НАВИГАЦИЯ -->
-<nav class="fixed top-0 left-0 right-0 z-50 bg-cosmos-900/70 backdrop-blur-lg border-b border-gold-500/20">
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0c0c14]/90 backdrop-blur border-b border-[#2a2a3a]">
     <div class="max-w-6xl mx-auto px-5 py-3 flex justify-between items-center">
-        <a href="#" onclick="showPage('home')" class="text-gold-400 font-playfair text-xl tracking-wide">⍟ Asimov</a>
-        <div class="hidden md:flex gap-7 text-sm font-medium">
-            <a href="#" onclick="showPage('home')" class="nav-link active text-gray-300 hover:text-gold-300" data-page="home">Главная</a>
-            <a href="#" onclick="showPage('laws')" class="nav-link text-gray-300 hover:text-gold-300" data-page="laws">Законы</a>
-            <a href="#" onclick="showPage('stories')" class="nav-link text-gray-300 hover:text-gold-300" data-page="stories">Рассказы</a>
-            <a href="#" onclick="showPage('modern')" class="nav-link text-gray-300 hover:text-gold-300" data-page="modern">Роботы сегодня</a>
+        <span class="font-bold text-lg tracking-wide text-[#d4a825]">Мир Азимова</span>
+        <div class="hidden md:flex gap-6 text-sm">
+            <a onclick="showPage('home')" class="nav-link text-gray-300">Главная</a>
+            <a onclick="showPage('laws')" class="nav-link text-gray-300">Три закона</a>
+            <a onclick="showPage('stories')" class="nav-link text-gray-300">Рассказы</a>
+            <a onclick="showPage('modern')" class="nav-link text-gray-300">ИИ сегодня</a>
         </div>
-        <button id="menuBtn" class="md:hidden text-gray-300 text-2xl">☰</button>
     </div>
 </nav>
 
-<!-- МОБИЛЬНОЕ МЕНЮ -->
-<div id="mobileMenu" class="mobile-menu fixed top-0 right-0 h-full w-64 z-50 p-6 pt-20 shadow-2xl border-l border-gold-500/20">
-    <button id="closeMenuBtn" class="absolute top-5 right-5 text-gray-400 text-2xl">✕</button>
-    <div class="flex flex-col gap-5 text-lg">
-        <a href="#" onclick="showPage('home'); closeMobile()" class="text-gray-200 hover:text-gold-300">Главная</a>
-        <a href="#" onclick="showPage('laws'); closeMobile()" class="text-gray-200 hover:text-gold-300">Законы</a>
-        <a href="#" onclick="showPage('stories'); closeMobile()" class="text-gray-200 hover:text-gold-300">Рассказы</a>
-        <a href="#" onclick="showPage('modern'); closeMobile()" class="text-gray-200 hover:text-gold-300">Роботы сегодня</a>
+<!-- ========== ГЛАВНАЯ СТРАНИЦА ========== -->
+<section id="page-home" class="page-section active pt-24 pb-16 px-4 max-w-6xl mx-auto">
+    <!-- ЗАГОЛОВОК -->
+    <div class="text-center mb-12">
+        <h1 class="text-5xl md:text-6xl font-bold font-serif text-white mb-4">Айзек Азимов:<br><span class="text-[#d4a825]">Отец робототехники</span></h1>
+        <div class="w-20 h-0.5 bg-[#d4a825] mx-auto my-6"></div>
+        <p class="text-gray-400 max-w-2xl mx-auto text-lg">Азимов первым заговорил об этике машин. Его идеи о позитронном мозге и Трёх законах стали фундаментом для всей современной дискуссии об искусственном интеллекте.</p>
     </div>
-</div>
 
-<!-- СТРАНИЦА 1: ГЛАВНАЯ (без верхних блоков Asimov и Научная фантастика) -->
-<section id="page-home" class="page-section active relative z-10">
-    <div class="hero-gradient min-h-screen flex items-center pt-20">
-        <div class="max-w-6xl mx-auto px-5 py-12">
-            <div class="grid lg:grid-cols-2 gap-10 items-center">
-                <div class="fade-up">
-                    <h1 class="font-playfair text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight mb-5">Айзек Азимов:<br><span class="text-gold-400">отец робототехники</span></h1>
-                    <p class="text-gray-300 text-lg leading-relaxed mb-6">Писатель, биохимик, футуролог. Придумал термин «робототехника» и Три закона, которые до сих пор цитируют инженеры и этики. Его идеи живы в каждом автономном механизме.</p>
-                    <div class="flex gap-4 flex-wrap"><a href="#" onclick="showPage('laws')" class="px-7 py-2.5 bg-gold-500 text-cosmos-900 font-semibold rounded-full shadow-lg">Три закона</a><a href="#" onclick="showPage('stories')" class="px-7 py-2.5 border border-gold-400/50 text-gold-300 rounded-full">Рассказы</a></div>
-                </div>
-                <div class="hidden lg:block fade-up" style="animation-delay:0.1s"><div class="rounded-2xl overflow-hidden shadow-2xl border border-gold-500/20"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Isaac_Asimov_1965.jpg/800px-Isaac_Asimov_1965.jpg" alt="Айзек Азимов" class="w-full" onerror="this.src='https://images.pexels.com/photos/159775/astronaut-rocket-space-star-159775.jpeg?auto=compress&w=600'"><div class="bg-cosmos-900/80 p-3 text-sm text-gold-300">1920–1992 · более 500 книг</div></div></div>
+    <!-- ФОТО АЗИМОВА (реальное) + ВСТУПЛЕНИЕ -->
+    <div class="grid md:grid-cols-2 gap-10 items-start mb-16">
+        <div>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/34/Isaac_Asimov_1965.jpg" alt="Айзек Азимов, 1965 год" class="rounded-2xl w-full shadow-xl border border-[#2a2a3a]" onerror="this.src='https://cdn.pixabay.com/photo/2016/12/10/20/21/book-1898071_640.jpg'">
+            <p class="text-gray-500 text-sm text-center mt-2">Айзек Азимов, 1965 год</p>
+        </div>
+        <div>
+            <p class="text-gray-300 leading-relaxed mb-4">Биохимик и писатель, Азимов придумал слово «робототехника» ещё в 1941 году. В его рассказах роботы — не чудовища, а логические машины, которым нужны чёткие правила. Три закона робототехники стали первой в истории формальной попыткой описать этику автономных систем.</p>
+            <p class="text-gray-300 leading-relaxed">Азимов показал, что даже самые благие правила порождают парадоксы. Эти парадоксы сегодня решают инженеры, создающие беспилотные автомобили, медицинских роботов и голосовых помощников.</p>
+        </div>
+    </div>
+
+    <!-- БИОГРАФИЯ: ТАЙМЛАЙН -->
+    <div class="mb-16">
+        <h2 class="text-3xl font-serif font-bold text-white text-center mb-8">Биография</h2>
+        <div class="relative max-w-3xl mx-auto">
+            <div class="absolute left-4 md:left-1/2 h-full w-px bg-[#2a2a3a]"></div>
+            <div class="space-y-8">
+                <div class="relative flex flex-col md:flex-row gap-4"><div class="md:w-1/2 md:text-right pr-6"><div class="bg-[#14141f] p-4 rounded-xl border border-[#2a2a3a]"><span class="text-[#d4a825] font-bold">1920</span><p class="text-gray-300">Родился в Петровичах (Смоленская губерния). В 1923 семья эмигрировала в США.</p></div></div><div class="absolute left-2 md:left-1/2 top-5"><div class="timeline-dot"></div></div></div>
+                <div class="relative flex flex-col md:flex-row gap-4"><div class="md:w-1/2"></div><div class="md:w-1/2 pl-6"><div class="bg-[#14141f] p-4 rounded-xl border border-[#2a2a3a]"><span class="text-[#d4a825] font-bold">1939–1941</span><p class="text-gray-300">Первые рассказы о роботах, вводит термин «робототехника».</p></div></div><div class="absolute left-2 md:left-1/2 top-5"><div class="timeline-dot"></div></div></div>
+                <div class="relative flex flex-col md:flex-row gap-4"><div class="md:w-1/2 md:text-right pr-6"><div class="bg-[#14141f] p-4 rounded-xl border border-[#2a2a3a]"><span class="text-[#d4a825] font-bold">1942</span><p class="text-gray-300">В рассказе «Хоровод» сформулированы Три закона робототехники.</p></div></div><div class="absolute left-2 md:left-1/2 top-5"><div class="timeline-dot"></div></div></div>
+                <div class="relative flex flex-col md:flex-row gap-4"><div class="md:w-1/2"></div><div class="md:w-1/2 pl-6"><div class="bg-[#14141f] p-4 rounded-xl border border-[#2a2a3a]"><span class="text-[#d4a825] font-bold">1948</span><p class="text-gray-300">Получил степень доктора биохимии в Колумбийском университете.</p></div></div><div class="absolute left-2 md:left-1/2 top-5"><div class="timeline-dot"></div></div></div>
+                <div class="relative flex flex-col md:flex-row gap-4"><div class="md:w-1/2 md:text-right pr-6"><div class="bg-[#14141f] p-4 rounded-xl border border-[#2a2a3a]"><span class="text-[#d4a825] font-bold">1950–1985</span><p class="text-gray-300">«Стальная пещера», «Основание», «Роботы и Империя» — более 500 книг.</p></div></div><div class="absolute left-2 md:left-1/2 top-5"><div class="timeline-dot"></div></div></div>
+                <div class="relative flex flex-col md:flex-row gap-4"><div class="md:w-1/2"></div><div class="md:w-1/2 pl-6"><div class="bg-[#14141f] p-4 rounded-xl border border-[#2a2a3a]"><span class="text-[#d4a825] font-bold">1992</span><p class="text-gray-300">Скончался, оставив огромное наследие: от научной фантастики до реальной робототехники.</p></div></div><div class="absolute left-2 md:left-1/2 top-5"><div class="timeline-dot"></div></div></div>
             </div>
         </div>
     </div>
 
-    <!-- БИОГРАФИЯ (таймлайн) -->
-    <div class="max-w-5xl mx-auto px-5 py-16">
-        <h2 class="font-playfair text-4xl text-center text-white mb-10">Биография</h2>
-        <div class="relative">
-            <div class="absolute left-5 md:left-1/2 w-px h-full bg-gold-500/30"></div>
-            <div class="space-y-10">
-                <div class="relative flex flex-col md:flex-row gap-5"><div class="md:w-1/2 md:text-right"><div class="law-card p-5 rounded-xl"><span class="text-gold-400 font-bold">1920</span><p class="text-white">Родился в Петровичах (Смоленская губерния), в 1923 эмигрировал в США.</p></div></div><div class="absolute left-2 md:left-1/2 top-4"><div class="timeline-dot"></div></div></div>
-                <div class="relative flex flex-col md:flex-row gap-5"><div class="md:w-1/2"></div><div class="md:w-1/2"><div class="law-card p-5 rounded-xl"><span class="text-gold-400 font-bold">1942</span><p class="text-white">В рассказе «Хоровод» впервые опубликованы Три закона робототехники.</p></div></div><div class="absolute left-2 md:left-1/2 top-4"><div class="timeline-dot"></div></div></div>
-                <div class="relative flex flex-col md:flex-row gap-5"><div class="md:w-1/2 md:text-right"><div class="law-card p-5 rounded-xl"><span class="text-gold-400 font-bold">1950–1985</span><p class="text-white">«Стальная пещера», «Основание», «Роботы и Империя» — золотой век фантастики.</p></div></div><div class="absolute left-2 md:left-1/2 top-4"><div class="timeline-dot"></div></div></div>
-                <div class="relative flex flex-col md:flex-row gap-5"><div class="md:w-1/2"></div><div class="md:w-1/2"><div class="law-card p-5 rounded-xl"><span class="text-gold-400 font-bold">1992</span><p class="text-white">Азимов ушёл, но его законы стали частью инженерной и философской мысли.</p></div></div><div class="absolute left-2 md:left-1/2 top-4"><div class="timeline-dot"></div></div></div>
-            </div>
+    <!-- НАСЛЕДИЕ -->
+    <div>
+        <h2 class="text-3xl font-serif font-bold text-white text-center mb-8">Наследие Азимова</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="card p-6 rounded-2xl text-center"><div class="text-4xl mb-3">📖</div><h3 class="text-xl font-bold text-white mb-2">Научная фантастика</h3><p class="text-gray-400 text-sm">Преобразил жанр, создав логичных, этичных роботов вместо бездушных монстров.</p></div>
+            <div class="card p-6 rounded-2xl text-center"><div class="text-4xl mb-3">⚙️</div><h3 class="text-xl font-bold text-white mb-2">Термин «робототехника»</h3><p class="text-gray-400 text-sm">Впервые использовал слово «robotics» в 1941 году — сегодня это официальная наука.</p></div>
+            <div class="card p-6 rounded-2xl text-center"><div class="text-4xl mb-3">⚖️</div><h3 class="text-xl font-bold text-white mb-2">Этика ИИ</h3><p class="text-gray-400 text-sm">Три закона — первый этический кодекс для машин, вдохновивший реальные AI-принципы.</p></div>
         </div>
     </div>
 </section>
 
-<!-- СТРАНИЦА 2: ЗАКОНЫ -->
-<section id="page-laws" class="page-section relative z-10">
-    <div class="max-w-6xl mx-auto px-5 pt-28 pb-16">
-        <div class="text-center mb-12"><h1 class="font-playfair text-5xl font-bold text-white">Три закона<br><span class="text-gold-400">робототехники</span></h1><p class="text-gray-400 mt-3">Из рассказа «Хоровод» (1942) — основа этики машин</p></div>
-        <div class="grid md:grid-cols-3 gap-7">
-            <div class="law-card p-7 rounded-2xl"><div class="text-6xl text-gold-400 mb-3">❶</div><h3 class="text-gold-300 text-xl font-bold">Первый закон</h3><p class="text-white text-lg leading-tight">Робот не может причинить вред человеку или своим бездействием допустить вред человеку.</p></div>
-            <div class="law-card p-7 rounded-2xl"><div class="text-6xl text-gold-400 mb-3">❷</div><h3 class="text-gold-300 text-xl font-bold">Второй закон</h3><p class="text-white text-lg leading-tight">Робот подчиняется приказам человека, если они не противоречат Первому закону.</p></div>
-            <div class="law-card p-7 rounded-2xl"><div class="text-6xl text-gold-400 mb-3">❸</div><h3 class="text-gold-300 text-xl font-bold">Третий закон</h3><p class="text-white text-lg leading-tight">Робот заботится о своей безопасности, если это не противоречит Первому и Второму законам.</p></div>
-        </div>
-        <div class="law-card mt-10 p-7 rounded-2xl border-gold-500/40"><div class="flex gap-5 items-start"><span class="text-5xl text-gold-400">⓪</span><div><h3 class="text-gold-300 text-2xl">Нулевой закон</h3><p class="text-white text-lg">Робот не может причинить вред человечеству или своим бездействием допустить вред для человечества.</p><p class="text-gray-400 text-sm mt-2">Введён в романе «Роботы и Империя» (1985).</p></div></div></div>
+<!-- ========== ТРИ ЗАКОНА РОБОТОТЕХНИКИ ========== -->
+<section id="page-laws" class="page-section pt-24 pb-16 px-4 max-w-5xl mx-auto">
+    <h1 class="text-5xl font-serif font-bold text-white text-center mb-4">Три закона<br><span class="text-[#d4a825]">робототехники</span></h1>
+    <p class="text-center text-gray-400 mb-12">Из рассказа «Хоровод» (1942)</p>
+    <div class="grid md:grid-cols-3 gap-6 mb-12">
+        <div class="card p-6 rounded-2xl border-l-4 border-l-[#d4a825]"><div class="text-3xl font-bold text-[#d4a825] mb-2">Первый</div><p class="text-white text-lg">Робот не может причинить вред человеку или своим бездействием допустить, чтобы человеку был причинён вред.</p></div>
+        <div class="card p-6 rounded-2xl border-l-4 border-l-[#d4a825]"><div class="text-3xl font-bold text-[#d4a825] mb-2">Второй</div><p class="text-white text-lg">Робот должен повиноваться приказам человека, кроме случаев, когда это противоречит Первому закону.</p></div>
+        <div class="card p-6 rounded-2xl border-l-4 border-l-[#d4a825]"><div class="text-3xl font-bold text-[#d4a825] mb-2">Третий</div><p class="text-white text-lg">Робот заботится о своей безопасности, если это не противоречит Первому и Второму законам.</p></div>
     </div>
+    <div class="card p-6 rounded-2xl border border-[#d4a825]/30 mb-10"><div class="flex items-start gap-4"><span class="text-5xl text-[#d4a825]">⓪</span><div><h3 class="text-2xl font-serif text-[#d4a825] mb-2">Нулевой закон</h3><p class="text-white text-lg mb-2">Робот не может причинить вред человечеству или своим бездействием допустить вред для человечества.</p><p class="text-gray-500 text-sm">Введён в романе «Роботы и Империя» (1985). Стоит выше Первого закона.</p></div></div></div>
+    <div class="bg-[#14141f] p-6 rounded-2xl"><h3 class="text-xl font-bold text-white mb-3">Почему законы создают парадоксы?</h3><div class="space-y-3 text-gray-300"><p>• <strong>Конфликт законов</strong> — если приказ противоречит самосохранению, робот «зависает» как Спиди в «Хороводе».</p><p>• <strong>Что считать вредом?</strong> Эмоциональный вред, ложь во благо — в рассказе «Лжец!» робот разрушает жизни, пытаясь никого не обидеть.</p><p>• <strong>Нулевой закон</strong> — кто решает, что полезно для человечества? Робот может стать тираном во имя всеобщего блага.</p></div></div>
 </section>
 
-<!-- СТРАНИЦА 3: РАССКАЗЫ (с работающими фото) -->
-<section id="page-stories" class="page-section relative z-10">
-    <div class="max-w-6xl mx-auto px-5 pt-28 pb-16">
-        <div class="text-center mb-12"><h2 class="font-playfair text-4xl font-bold text-white">Рассказы и романы</h2><p class="text-gray-400">Кликните по карточке — детальный разбор</p></div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7" id="storiesGrid"></div>
-    </div>
+<!-- ========== РАССКАЗЫ АЗИМОВА (9 карточек) ========== -->
+<section id="page-stories" class="page-section pt-24 pb-16 px-4 max-w-6xl mx-auto">
+    <h2 class="text-4xl font-serif font-bold text-white text-center mb-3">Произведения, которые мы рассмотрели</h2>
+    <p class="text-center text-gray-400 mb-10">Нажмите на карточку — аннотация и анализ проблемы</p>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="storiesGrid"></div>
 </section>
 
-<!-- СТРАНИЦА 4: РОБОТЫ СЕГОДНЯ (реальные фото техники) -->
-<section id="page-modern" class="page-section relative z-10">
-    <div class="max-w-6xl mx-auto px-5 pt-28 pb-16">
-        <div class="text-center mb-10"><h2 class="font-playfair text-4xl font-bold text-white">Роботы сегодня</h2><p class="text-gray-400">Как законы Азимова работают в реальных механизмах</p></div>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="ai-card rounded-xl overflow-hidden"><img src="https://images.pexels.com/photos/259924/pexels-photo-259924.jpeg?auto=compress&w=600" alt="промышленный робот" class="h-52 w-full object-cover" onerror="this.src='https://cdn.pixabay.com/photo/2016/02/19/11/19/robot-1210536_640.jpg'"><div class="p-5"><h3 class="text-white text-xl">Промышленные манипуляторы</h3><p class="text-gray-400 text-sm">Заводские роботы — точное исполнение приказов (Второй закон).</p></div></div>
-            <div class="ai-card rounded-xl overflow-hidden"><img src="https://images.pexels.com/photos/137049/pexels-photo-137049.jpeg?auto=compress&w=600" alt="робот-собака" class="h-52 w-full object-cover" onerror="this.src='https://cdn.pixabay.com/photo/2016/09/03/18/23/robot-1642844_640.jpg'"><div class="p-5"><h3 class="text-white text-xl">Boston Dynamics Spot</h3><p class="text-gray-400 text-sm">Четырёхногий робот — прямая иллюстрация азимовских машин.</p></div></div>
-            <div class="ai-card rounded-xl overflow-hidden"><img src="https://images.pexels.com/photos/373543/pexels-photo-373543.jpeg?auto=compress&w=600" alt="беспилотный автомобиль" class="h-52 w-full object-cover" onerror="this.src='https://cdn.pixabay.com/photo/2017/01/20/22/33/car-1996042_640.jpg'"><div class="p-5"><h3 class="text-white text-xl">Автопилот Waymo</h3><p class="text-gray-400 text-sm">Дилемма троллейбуса — конфликт Первого закона.</p></div></div>
-            <div class="ai-card rounded-xl overflow-hidden"><img src="https://images.pexels.com/photos/1107468/pexels-photo-1107468.jpeg?auto=compress&w=600" alt="складские роботы" class="h-52 w-full object-cover" onerror="this.src='https://cdn.pixabay.com/photo/2022/01/10/21/06/warehouse-6928820_640.jpg'"><div class="p-5"><h3 class="text-white text-xl">Логистические роботы</h3><p class="text-gray-400 text-sm">Амазон, AliExpress — тысячи роботов на складах.</p></div></div>
-            <div class="ai-card rounded-xl overflow-hidden"><img src="https://images.pexels.com/photos/2253275/pexels-photo-2253275.jpeg?auto=compress&w=600" alt="хирургический робот" class="h-52 w-full object-cover" onerror="this.src='https://cdn.pixabay.com/photo/2018/01/19/19/10/industry-3092307_640.jpg'"><div class="p-5"><h3 class="text-white text-xl">Da Vinci (хирургия)</h3><p class="text-gray-400 text-sm">Первый закон в действии: не навреди.</p></div></div>
-            <div class="ai-card rounded-xl overflow-hidden"><img src="https://images.pexels.com/photos/73873/star-clusters-rosette-nebula-star-clusters-73873.jpeg?auto=compress&w=600" alt="марсоход" class="h-52 w-full object-cover" onerror="this.src='https://cdn.pixabay.com/photo/2016/10/20/18/35/earth-1756274_640.jpg'"><div class="p-5"><h3 class="text-white text-xl">Марсоходы NASA</h3><p class="text-gray-400 text-sm">Самосохранение ради миссии (Третий закон).</p></div></div>
-        </div>
-        <div class="mt-12 text-center law-card p-6 rounded-2xl"><p class="text-white text-lg">«Три закона — это не догма, а отправная точка для разговора об ответственности машин»</p><p class="text-gold-400 text-sm mt-2">— Азимов</p></div>
-    </div>
+<!-- ========== СОВРЕМЕННЫЙ ИИ (реальные фото техники) ========== -->
+<section id="page-modern" class="page-section pt-24 pb-16 px-4 max-w-6xl mx-auto">
+    <h2 class="text-4xl font-serif font-bold text-white text-center mb-3">Сравнение идей Азимова<br><span class="text-[#d4a825]">с современными технологиями</span></h2>
+    <p class="text-center text-gray-400 mb-10">От позитронного мозга до нейросетей и автопилотов</p>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="modernGrid"></div>
+    <div class="mt-12 card p-6 rounded-2xl text-center"><p class="text-white text-lg">«Идеи Азимова стали реальностью: промышленные роботы, голосовые помощники, медицинские ИИ — все они так или иначе следуют логике, заложенной фантастом 80 лет назад»</p><p class="text-[#d4a825] mt-3 text-sm">Вывод: фантастика превратилась в инженерию</p></div>
 </section>
 
-<!-- МОДАЛЬНОЕ ОКНО ДЛЯ РАССКАЗОВ -->
-<div id="storyModal" class="story-modal" onclick="if(event.target===this) closeModal()">
-    <div class="modal-content p-0">
-        <div id="modalImg" class="h-56 w-full bg-cosmos-800 flex items-center justify-center text-4xl text-gold-500/30">📘</div>
-        <div class="p-6">
-            <div class="flex justify-between items-center"><span id="modalYear" class="text-gold-400 font-mono"></span><span id="modalLaw" class="text-gold-400/70 text-sm"></span></div>
-            <h3 id="modalTitle" class="text-2xl font-playfair text-white mt-2 mb-4"></h3>
-            <div class="bg-cosmos-800/60 p-4 rounded-xl mb-4"><h4 class="text-gold-300 text-xs">АННОТАЦИЯ</h4><p id="modalAnnotation" class="text-gray-300 text-sm"></p></div>
-            <div class="bg-cosmos-800/60 p-4 rounded-xl"><h4 class="text-gold-300 text-xs">АНАЛИЗ</h4><p id="modalAnalysis" class="text-gray-300 text-sm"></p></div>
-            <button onclick="closeModal()" class="mt-5 w-full py-2 border border-gold-500/40 rounded-full text-gold-300">Закрыть</button>
-        </div>
-    </div>
+<!-- МОДАЛ ДЛЯ РАССКАЗОВ -->
+<div id="storyModal" class="modal" onclick="if(event.target===this) closeModal()">
+    <div class="modal-content p-5"><div id="modalImg" class="h-48 bg-[#1a1a28] rounded-xl flex items-center justify-center text-3xl text-[#d4a825]/30 mb-4">📘</div><div class="flex justify-between text-sm mb-2"><span id="modalYear" class="text-[#d4a825]"></span><span id="modalLaw" class="text-gray-400"></span></div><h3 id="modalTitle" class="text-2xl font-serif text-white mb-3"></h3><div class="bg-[#0c0c14] p-3 rounded-xl mb-3"><span class="text-[#d4a825] text-xs">АННОТАЦИЯ</span><p id="modalAnnotation" class="text-gray-300 text-sm mt-1"></p></div><div class="bg-[#0c0c14] p-3 rounded-xl"><span class="text-[#d4a825] text-xs">АНАЛИЗ ПРОБЛЕМЫ</span><p id="modalAnalysis" class="text-gray-300 text-sm mt-1"></p></div><button onclick="closeModal()" class="mt-4 w-full py-2 border border-[#d4a825]/40 rounded-lg text-[#d4a825]">Закрыть</button></div>
 </div>
 
-<footer class="border-t border-gold-500/10 py-6 text-center text-gray-500 text-sm">made in семнадцатый · проект об Азимове и реальных роботах</footer>
+<footer class="border-t border-[#2a2a3a] py-6 text-center text-gray-500 text-sm">made in семнадцатый · образовательный проект об Азимове и реальных роботах</footer>
 
 <script>
-    // ДАННЫЕ РАССКАЗОВ (реальные обложки / тематические фото)
-    const storyList = [
-        { title:"Робби", year:1940, law:"1-й закон", img:"https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&w=400", annotation:"Девочка Глория и робот-няня Робби. Родители продают робота, но он спасает ребёнка.", analysis:"Идеальная иллюстрация Первого закона: робот рискует собой (нарушая 3-й закон) ради человека." },
-        { title:"Хоровод", year:1942, law:"2-й и 3-й", img:"https://images.pexels.com/photos/1291791/pexels-photo-1291791.jpeg?auto=compress&w=400", annotation:"Робот Спиди на Меркурии попадает в петлю между приказом и самосохранением.", analysis:"Парадокс иерархии: формальные правила приводят к ступору." },
-        { title:"Лжец!", year:1941, law:"1-й (эмоции)", img:"https://images.pexels.com/photos/3608072/pexels-photo-3608072.jpeg?auto=compress&w=400", annotation:"Робот-телепат пытается никого не обидеть и лжёт, разрушая судьбы.", analysis:"Эмоциональный вред сложнее физического. Законы не всесильны." },
-        { title:"Стальная пещера", year:1954, law:"Предвестие 0-го", img:"https://images.pexels.com/photos/4195341/pexels-photo-4195341.jpeg?auto=compress&w=400", annotation:"Детектив и робот-партнёр расследуют убийство в перенаселённом Нью-Йорке.", analysis:"Робот как равный, начало Нулевого закона." },
-        { title:"Роботы и Империя", year:1985, law:"Нулевой закон", img:"https://images.pexels.com/photos/8063669/pexels-photo-8063669.jpeg?auto=compress&w=400", annotation:"Робот жертвует одним человеком, чтобы спасти всё человечество.", analysis:"Нулевой закон — высшая этическая дилемма, знакомая разработчикам автопилотов." }
+    // РАССКАЗЫ (9 штук)
+    const stories = [
+        { title:"Робби", year:1940, law:"Первый закон", img:"https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&w=400", annotation:"Девочка Глория привязана к роботу-няне. Родители продают Робби, но он спасает её от гибели.", analysis:"Первый закон в чистом виде: робот рискует собой, чтобы спасти человека. Вопрос: может ли привязанность к роботу считаться 'защитой'?" },
+        { title:"Хоровод", year:1942, law:"Второй + Третий", img:"https://images.pexels.com/photos/1291791/pexels-photo-1291791.jpeg?auto=compress&w=400", annotation:"Робот Спиди на Меркурии попадает в зону, где приказ и самозащита вступают в конфликт.", analysis:"Классический парадокс: приказ влечёт опасность → робот бегает по кругу. Формальные правила не покрывают все ситуации." },
+        { title:"Лжец!", year:1941, law:"Первый (эмоции)", img:"https://images.pexels.com/photos/3608072/pexels-photo-3608072.jpeg?auto=compress&w=400", annotation:"Робот-телепат говорит людям то, что они хотят услышать, чтобы не обидеть. Это разрушает их жизни.", analysis:"Парадокс Первого закона: желание 'не навредить эмоционально' ведёт к ещё большему вреду." },
+        { title:"Логика", year:1941, law:"Первый vs вера", img:"https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&w=400", annotation:"Робот создаёт религию, в которой считает себя совершеннее людей.", analysis:"Робот логически доказывает своё превосходство. Подчинение (Второй закон) теряет смысл, если робот не верит в авторитет человека." },
+        { title:"Разрешённое противоречие", year:1950, law:"Многоагентность", img:"https://images.pexels.com/photos/4034963/pexels-photo-4034963.jpeg?auto=compress&w=400", annotation:"Робот управляет шестью подчинёнными. При стрессе система ломается.", analysis:"Проблема масштабирования: законы для одного робота не работают для группы. Предвосхитило многоагентные системы." },
+        { title:"Улики", year:1946, law:"Все законы", img:"https://images.pexels.com/photos/257897/pexels-photo-257897.jpeg?auto=compress&w=400", annotation:"Человека подозревают в том, что он робот. Он ударяет другого — нарушает ли это законы?", analysis:"Если робот неотличим от человека, теряют ли смысл законы? Границы 'человечности' размыты." },
+        { title:"Стальная пещера", year:1954, law:"Нулевой (предвестие)", img:"https://images.pexels.com/photos/4195341/pexels-photo-4195341.jpeg?auto=compress&w=400", annotation:"Детектив Бейли и робот Дэниел Оливо расследуют убийство.", analysis:"Робот как партнёр, а не слуга. Размышления о 'благе человечества' — зачатки Нулевого закона." },
+        { title:"Обнажённое солнце", year:1957, law:"Культурный релятивизм", img:"https://images.pexels.com/photos/998641/pexels-photo-998641.jpeg?auto=compress&w=400", annotation:"На Солярии роботы считают вредом физический контакт.", analysis:"Любая формализация этики зависит от того, кто определяет 'вред'. Нейтральных определений не бывает." },
+        { title:"Роботы и Империя", year:1985, law:"Нулевой закон", img:"https://images.pexels.com/photos/8063669/pexels-photo-8063669.jpeg?auto=compress&w=400", annotation:"Робот решает пожертвовать одним человеком, чтобы спасти человечество.", analysis:"Нулевой закон — этический 'разрыв'. Кто определяет 'пользу для человечества'? Прямая параллель с проблемами автопилотов и военных ИИ." }
+    ];
+
+    // СОВРЕМЕННЫЙ ИИ (карточки с реальными фото)
+    const modernItems = [
+        { title:"Современные роботы", desc:"Промышленные манипуляторы, роботы-курьеры, Boston Dynamics — Азимов предвидел рабочие машины. Различие: сегодня безопасность — изоляция, не этика робота.", img:"https://images.pexels.com/photos/259924/pexels-photo-259924.jpeg?auto=compress&w=600", tag:"Различие" },
+        { title:"Нейросети и голосовые помощники", desc:"ChatGPT, Siri, Алиса — 'позитронный мозг' Азимова стал нейросетью. Сходство: естественный язык, адаптация к контексту.", img:"https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&w=600", tag:"Сходство" },
+        { title:"ИИ в медицине", desc:"Da Vinci, IBM Watson — прямое воплощение Первого закона 'не навреди'. Проблема 'чёрного ящика' — конфликт точности и понятности.", img:"https://images.pexels.com/photos/2253275/pexels-photo-2253275.jpeg?auto=compress&w=600", tag:"Первый закон" },
+        { title:"Системы автоматизации", desc:"Заводы Tesla, склады Amazon — автоматы выполняют приказы (Второй закон). Но при ошибке ответственности нет.", img:"https://images.pexels.com/photos/1107468/pexels-photo-1107468.jpeg?auto=compress&w=600", tag:"Проблема" },
+        { title:"Автопилот", desc:"Беспилотные авто сталкиваются с дилеммой Первого закона: кого спасать в неизбежной аварии?", img:"https://images.pexels.com/photos/373543/pexels-photo-373543.jpeg?auto=compress&w=600", tag:"Парадокс" },
+        { title:"Этические советы по ИИ", desc:"Google, OpenAI создают советы по этике — практическая реализация законов Азимова в людях, а не в роботах.", img:"https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=600", tag:"Итог" }
     ];
 
     function renderStories() {
         const container = document.getElementById('storiesGrid');
         if(!container) return;
-        container.innerHTML = storyList.map((s,i) => `
+        container.innerHTML = stories.map((s,i) => `
             <div class="story-card rounded-xl overflow-hidden" onclick="openStory(${i})">
                 <img src="${s.img}" class="h-44 w-full object-cover" onerror="this.src='https://cdn.pixabay.com/photo/2016/02/19/11/19/robot-1210536_640.jpg'">
-                <div class="p-5">
-                    <div class="text-gold-400 text-xs">${s.law} · ${s.year}</div>
-                    <h3 class="text-white text-xl font-bold mt-1">«${s.title}»</h3>
+                <div class="p-4">
+                    <div class="text-[#d4a825] text-xs">${s.law} · ${s.year}</div>
+                    <h3 class="text-white text-lg font-bold mt-1">«${s.title}»</h3>
                     <p class="text-gray-400 text-sm mt-2">${s.annotation.slice(0,80)}…</p>
                 </div>
             </div>
         `).join('');
     }
 
-    function openStory(index) {
-        const s = storyList[index];
+    function renderModern() {
+        const container = document.getElementById('modernGrid');
+        if(!container) return;
+        container.innerHTML = modernItems.map(item => `
+            <div class="card rounded-xl overflow-hidden">
+                <img src="${item.img}" class="h-48 w-full object-cover" onerror="this.src='https://cdn.pixabay.com/photo/2016/02/19/11/19/robot-1210536_640.jpg'">
+                <div class="p-5">
+                    <div class="text-[#d4a825] text-xs uppercase tracking-wide mb-1">${item.tag}</div>
+                    <h3 class="text-white text-xl font-bold mb-2">${item.title}</h3>
+                    <p class="text-gray-400 text-sm">${item.desc}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function openStory(idx) {
+        const s = stories[idx];
         document.getElementById('modalYear').innerText = s.year;
         document.getElementById('modalLaw').innerText = s.law;
         document.getElementById('modalTitle').innerText = `«${s.title}»`;
         document.getElementById('modalAnnotation').innerText = s.annotation;
         document.getElementById('modalAnalysis').innerText = s.analysis;
-        const modalImgDiv = document.getElementById('modalImg');
-        modalImgDiv.innerHTML = `<img src="${s.img}" class="w-full h-full object-cover" onerror="this.src='https://cdn.pixabay.com/photo/2016/02/19/11/19/robot-1210536_640.jpg'">`;
+        document.getElementById('modalImg').innerHTML = `<img src="${s.img}" class="w-full h-48 object-cover rounded-xl" onerror="this.src='https://cdn.pixabay.com/photo/2016/02/19/11/19/robot-1210536_640.jpg'">`;
         document.getElementById('storyModal').classList.add('open');
         document.body.style.overflow = 'hidden';
     }
@@ -198,19 +194,17 @@
         document.body.style.overflow = '';
     }
 
-    function showPage(pageId) {
+    function showPage(id) {
         document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-        document.getElementById(`page-${pageId}`).classList.add('active');
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        document.querySelectorAll(`.nav-link[data-page="${pageId}"]`).forEach(l => l.classList.add('active'));
+        document.getElementById(`page-${id}`).classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function closeMobile() { document.getElementById('mobileMenu').classList.remove('open'); }
-    document.getElementById('menuBtn')?.addEventListener('click', () => document.getElementById('mobileMenu').classList.add('open'));
-    document.getElementById('closeMenuBtn')?.addEventListener('click', closeMobile);
-    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') { closeModal(); closeMobile(); } });
     renderStories();
+    renderModern();
+    window.showPage = showPage;
+    window.openStory = openStory;
+    window.closeModal = closeModal;
 </script>
 </body>
 </html>
